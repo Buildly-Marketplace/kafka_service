@@ -30,23 +30,23 @@ services:
       - /var/lib/postgresql/data/
     restart: always
 
-  kakfaservice:
+  kafkaservice:
     build:
       context: .
       dockerfile: Dockerfile
     entrypoint: bash /code/docker-entrypoint.sh
-    container_name: kakfaservice
-    image: kakfaservice
+    container_name: kafkaservice
+    image: kafkaservice
     volumes:
       - .:/code
     ports:
-      - "8080:8080"
+      - "8081:8080"
     depends_on:
       - kafka_cluster
       - postgres_kafka
     environment:
-      ALLOWED_HOSTS: localhost,127.0.0.1,0.0.0.0
-      CORS_ORIGIN_WHITELIST: localhost,127.0.0.1,0.0.0.0
+      ALLOWED_HOSTS: "*"
+      CORS_ORIGIN_WHITELIST: "*"
       DATABASE_ENGINE: "postgresql"
       DATABASE_NAME: "kafkaservice"
       DATABASE_USER: "root"
@@ -64,4 +64,3 @@ services:
         qhqvJu1hKPYn9HYd75c0gIDYHJ9lb7QwQvg44aO27104rDK0xSstzL0CAwEAAQ==
         -----END PUBLIC KEY-----
       SECRET_KEY: "nothing"
-      STATIC_ROOT: /static/

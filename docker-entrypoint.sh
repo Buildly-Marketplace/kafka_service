@@ -11,4 +11,4 @@ echo $(date -u) "- Creating admin user"
 python manage.py shell -c "from django.contrib.auth.models import User; User.objects.filter(email='admin@example.com').delete(); User.objects.create_superuser('admin', 'admin@example.com', 'admin')"
 
 echo $(date -u) "- Running the server"
-gunicorn kakfaservice.wsgi --config kakfaservice/gunicorn_conf.py
+gunicorn kafka_config.wsgi --config kafka_config/gunicorn_conf.py

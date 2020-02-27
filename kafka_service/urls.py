@@ -1,10 +1,8 @@
-from rest_framework import routers
+from django.urls import path
 
 from kafka_service import views
 
-router = routers.SimpleRouter()
 
-router.register(r'data', views.KafkaServer)
-
-
-urlpatterns = router.urls
+urlpatterns = [
+    path('data/', views.KafkaView.as_view(), name='kafka-view')
+]

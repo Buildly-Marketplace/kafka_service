@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from kafka_service.client import KafkaClient
 
 
-class KafkaServer(views.APIView):
+class KafkaView(views.APIView):
     def post(self, request, *args, **kwargs):
         client = KafkaClient(settings.KAFKA_TOPIC)
 
