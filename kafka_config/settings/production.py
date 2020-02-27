@@ -39,3 +39,9 @@ USE_X_FORWARDED_HOST = True if os.getenv('USE_X_FORWARDED_HOST') == 'True' \
 
 if os.getenv('USE_HTTPS') == 'True':
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+
+# Kafka configuration
+KAFKA_TOPIC = os.environ['KAFKA_TOPIC']
+KAFKA_HOST = os.environ['KAFKA_HOST']
+KAFKA_PORT = os.environ['KAFKA_PORT']
