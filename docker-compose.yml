@@ -1,21 +1,92 @@
 version: "3.1"
 
 services:
-
-  zookeeper:
-    image: wurstmeister/zookeeper
-    ports:
-      - "2181:2181"
-
-  kafka_cluster:
-    container_name: kafka_cluster
-    image: wurstmeister/kafka:2.12-2.4.0
+  zookeeper-1:
+    image: confluentinc/cp-zookeeper:latest
     environment:
-      KAFKA_ADVERTISED_HOST_NAME: 172.17.0.1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_CREATE_TOPICS: "Topic1:1:1"
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_CLIENT_PORT: 22181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_INIT_LIMIT: 5
+      ZOOKEEPER_SYNC_LIMIT: 2
+      ZOOKEEPER_SERVERS: zookeeper1:22888:23888;zookeeper2:32888:33888;zookeeper3:42888:43888
+    container_name: zookeeper1
+    extra_hosts:
+      - "moby:127.0.0.1"
+
+  zookeeper-2:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_SERVER_ID: 2
+      ZOOKEEPER_CLIENT_PORT: 32181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_INIT_LIMIT: 5
+      ZOOKEEPER_SYNC_LIMIT: 2
+      ZOOKEEPER_SERVERS: zookeeper1:22888:23888;zookeeper2:32888:33888;zookeeper3:42888:43888
+    container_name: zookeeper2
+    extra_hosts:
+      - "moby:127.0.0.1"
+
+  zookeeper-3:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_SERVER_ID: 3
+      ZOOKEEPER_CLIENT_PORT: 42181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_INIT_LIMIT: 5
+      ZOOKEEPER_SYNC_LIMIT: 2
+      ZOOKEEPER_SERVERS: zookeeper1:22888:23888;zookeeper2:32888:33888;zookeeper3:42888:43888
+    container_name: zookeeper3
+    extra_hosts:
+      - "moby:127.0.0.1"
+
+  kafka-1:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafkanode1
+    depends_on:
+      - zookeeper-1
+      - zookeeper-2
+      - zookeeper-3
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper1:22181,zookeeper2:32181,zookeeper3:42181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafkanode1:19092
     ports:
-      - "9092:9092"
+      - "19092:19092"
+    extra_hosts:
+      - "moby:127.0.0.1"
+
+  kafka-2:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafkanode2
+    depends_on:
+      - zookeeper-1
+      - zookeeper-2
+      - zookeeper-3
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper1:22181,zookeeper2:32181,zookeeper3:42181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafkanode2:29092
+    ports:
+      - "29092:29092"
+    extra_hosts:
+      - "moby:127.0.0.1"
+
+  kafka-3:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafkanode3
+    depends_on:
+      - zookeeper-1
+      - zookeeper-2
+      - zookeeper-3
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper1:22181,zookeeper2:32181,zookeeper3:42181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafkanode3:39092
+    ports:
+      - "39092:39092"
+    extra_hosts:
+      - "moby:127.0.0.1"
 
   postgres_kafka:
     container_name: postgres_kafka
@@ -40,7 +111,6 @@ services:
     ports:
       - "8081:8080"
     depends_on:
-      - kafka_cluster
       - postgres_kafka
     environment:
       ALLOWED_HOSTS: "*"
