@@ -124,8 +124,7 @@ services:
       DEBUG: "True"
       DJANGO_SETTINGS_MODULE: "kafka_config.settings.production"
       KAFKA_TOPIC: "Topic1"
-      KAFKA_HOST: "kafka_cluster"
-      KAFKA_PORT: "9092"
+      KAFKA_HOSTS: "kafkanode1:19092,kafkanode2:29092,kafkanode3:39092"
       JWT_PUBLIC_KEY_RSA_BUILDLY: |-
         -----BEGIN PUBLIC KEY-----
         MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBALFc9NFZaOaSwUMPNektbtJqEjYZ6IRB

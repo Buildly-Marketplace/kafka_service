@@ -43,5 +43,4 @@ if os.getenv('USE_HTTPS') == 'True':
 
 # Kafka configuration
 KAFKA_TOPIC = os.environ['KAFKA_TOPIC']
-KAFKA_HOST = os.environ['KAFKA_HOST']
-KAFKA_PORT = os.environ['KAFKA_PORT']
+KAFKA_HOSTS = os.environ['KAFKA_HOSTS'].split(',')
