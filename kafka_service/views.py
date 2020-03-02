@@ -12,13 +12,18 @@ class KafkaView(views.APIView):
     def post(self, request, *args, **kwargs):
         client = KafkaClient(settings.KAFKA_TOPIC)
 
-        message = json.dumps(request.data)
+        message = request.data
         client.publish(message)
 
         return Response(status=status.HTTP_201_CREATED)
 
     def get(self, request, *args, **kwargs):
         client = KafkaClient(settings.KAFKA_TOPIC)
-        messages = client.consume()
+        consumer = client.consume()
+        response = list()
+        for message in consumer:
+            payload = message.value.decode('utf-8')
+            json_payload = json.loads(payload)
+            response.append(json_payload)
 
-        return Response(messages, status=status.HTTP_200_OK)
+        return Response(response, status=status.HTTP_200_OK)
