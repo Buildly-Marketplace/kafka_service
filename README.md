@@ -14,9 +14,8 @@ Run the web server:
 docker-compose up
 ```
 
-Open your browser with URL `http://localhost:8080`.
-For the admin panel `http://localhost:8080/admin`
-(user: `admin`, password: `admin`).
+The API is accessible via the URL `http://localhost:8081`.
+User for testing: (username: `admin`, password: `admin`).
 
 Run the tests only once:
 
